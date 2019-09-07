@@ -1,0 +1,40 @@
+*.sln
+*.csproj
+*.unityproj
+Library/
+MultiTest_Data/
+ProtoTest_Data/
+SCG_Data/
+OBS_Data/
+Spaceless.exe
+Spaceless_Data/
+*temp.meta
+Temp/
+*.app
+*.userprefs
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+OBS.exe
+SCG.exe
+MultiTest.exe
+*.rar
+*~$*
+player_win_x86_s.pdb
+Docs/WhoKnows_Too_Much_Random.xlsx
+*.pdb
+*.suo
+.vs\scg\v14\.suo
+.vs
+.vscode/launch.json
+.vscode/settings.json
+Assets/Editor/VSCode.cs
+Assets/Editor/VSCode.cs.meta
+SwitchIL2CPPCache
+SwitchIL2CPPStats
+PCBuild/
+obj/
+Assets/Asset Store/Cliff Rocks/
+Assets/Resources/AnimationTempData/
+Assets/Resources/AnimationTempData.meta
+Assets/Scripts/Utility and Extensions/NewtonSoft/Newtonsoft.Json.pdb.meta
+*.nsp
+Assets/Plugins/Sirenix/Odin Inspector/Config/Resources/Sirenix.meta
