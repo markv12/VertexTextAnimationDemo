@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -62,27 +62,11 @@ public class DialogueVertexAnimator {
                 FinishAnimating(onFinish);
             }
             if (ShouldShowNextCharacter(secondsPerCharacter, timeOfLastCharacter)) {
-                if (visableCharacterIndex < charCount) {
-                    for (int i = 0; i < commands.Count; i++) {
-                        DialogueCommand command = commands[i];
-                        if (command.position == visableCharacterIndex) {
-                            switch (command.type) {
-                                case DialogueCommandType.Pause:
-                                    timeOfLastCharacter = Time.unscaledTime + command.floatValue;
-                                    break;
-                                case DialogueCommandType.TextSpeedChange:
-                                    secondsPerCharacter = 1f / command.floatValue;
-                                    break;
-                            }
-                            commands.RemoveAt(i);
-                            i--;
-                        }
-                    }
-                    if (ShouldShowNextCharacter(secondsPerCharacter, timeOfLastCharacter)) {
+                if (visableCharacterIndex <= charCount) {
+                    ExecuteCommandsForCurrentIndex(commands, visableCharacterIndex, ref secondsPerCharacter, ref timeOfLastCharacter);
+                    if (visableCharacterIndex < charCount && ShouldShowNextCharacter(secondsPerCharacter, timeOfLastCharacter)) {
                         charAnimStartTimes[visableCharacterIndex] = Time.unscaledTime;
-                        if (textInfo.characterInfo[visableCharacterIndex].character != ' ') {
-                            PlayDialogueSound(voice_sound);
-                        }
+                        PlayDialogueSound(voice_sound);
                         visableCharacterIndex++;
                         timeOfLastCharacter = Time.unscaledTime;
                         if (visableCharacterIndex == charCount) {
@@ -113,7 +97,7 @@ public class DialogueVertexAnimator {
                         charSize = Mathf.Min(1, timeSinceAnimStart / CHAR_ANIM_TIME);
                     }
 
-                    Vector3 animPosAdjustment = GetAnimPosAdjustment(textAnimInfo, j, Time.unscaledTime)* textAnimationScale;
+                    Vector3 animPosAdjustment = GetAnimPosAdjustment(textAnimInfo, j, textBox.fontSize, Time.unscaledTime);
                     Vector3 offset = (sourceVertices[vertexIndex + 0] + sourceVertices[vertexIndex + 2]) / 2;
                     destinationVertices[vertexIndex + 0] = ((sourceVertices[vertexIndex + 0] - offset) * charSize) + offset + animPosAdjustment;
                     destinationVertices[vertexIndex + 1] = ((sourceVertices[vertexIndex + 1] - offset) * charSize) + offset + animPosAdjustment;
@@ -131,25 +115,45 @@ public class DialogueVertexAnimator {
         }
     }
 
+    private void ExecuteCommandsForCurrentIndex(List<DialogueCommand> commands, int visableCharacterIndex, ref float secondsPerCharacter, ref float timeOfLastCharacter) {
+        for (int i = 0; i < commands.Count; i++) {
+            DialogueCommand command = commands[i];
+            if (command.position == visableCharacterIndex) {
+                switch (command.type) {
+                    case DialogueCommandType.Pause:
+                        timeOfLastCharacter = Time.unscaledTime + command.floatValue;
+                        break;
+                    case DialogueCommandType.TextSpeedChange:
+                        secondsPerCharacter = 1f / command.floatValue;
+                        break;
+                }
+                commands.RemoveAt(i);
+                i--;
+            }
+        }
+    }
+
     private void FinishAnimating(Action onFinish) {
         textAnimating = false;
         stopAnimating = false;
         onFinish?.Invoke();
     }
 
-    private const float NOISE_MAGNITUDE_ADJUSTMENT = 0.09f;
-    private const float NOISE_FREQUENCY_ADJUSTMENT = 12f;
-    private Vector3 GetAnimPosAdjustment(TextAnimInfo[] textAnimInfo, int charIndex, float time) {
+    private const float NOISE_MAGNITUDE_ADJUSTMENT = 0.06f;
+    private const float NOISE_FREQUENCY_ADJUSTMENT = 15f;
+    private const float WAVE_MAGNITUDE_ADJUSTMENT = 0.06f;
+    private Vector3 GetAnimPosAdjustment(TextAnimInfo[] textAnimInfo, int charIndex, float fontSize, float time) {
         float x = 0;
         float y = 0;
         for (int i = 0; i < textAnimInfo.Length; i++) {
             TextAnimInfo info = textAnimInfo[i];
             if (charIndex >= info.startIndex && charIndex < info.endIndex) {
                 if (info.type == TextAnimationType.shake) {
-                    x += (Mathf.PerlinNoise((charIndex + time) * NOISE_FREQUENCY_ADJUSTMENT, 0) - 0.5f) * NOISE_MAGNITUDE_ADJUSTMENT;
-                    y += (Mathf.PerlinNoise((charIndex + time) * NOISE_FREQUENCY_ADJUSTMENT, 1000) - 0.5f) * NOISE_MAGNITUDE_ADJUSTMENT;
+                    float scaleAdjust = fontSize * NOISE_MAGNITUDE_ADJUSTMENT;
+                    x += (Mathf.PerlinNoise((charIndex + time) * NOISE_FREQUENCY_ADJUSTMENT, 0) - 0.5f) * scaleAdjust;
+                    y += (Mathf.PerlinNoise((charIndex + time) * NOISE_FREQUENCY_ADJUSTMENT, 1000) - 0.5f) * scaleAdjust;
                 } else if (info.type == TextAnimationType.wave) {
-                    y += Mathf.Sin((charIndex * 1.5f) + (time * 6)) * 0.07f;
+                    y += Mathf.Sin((charIndex * 1.5f) + (time * 6)) * fontSize * WAVE_MAGNITUDE_ADJUSTMENT;
                 }
             }
         }
