@@ -20,9 +20,9 @@ public class DialogueManager : MonoBehaviour
     [TextArea]
     public string dialogue3;
 
-    private DialogueVertexAnimator utility;
+    private DialogueVertexAnimator dialogueVertexAnimator;
     void Awake() {
-        utility = new DialogueVertexAnimator(textBox, audioSourceGroup);
+        dialogueVertexAnimator = new DialogueVertexAnimator(textBox, audioSourceGroup);
         playDialogue1Button.onClick.AddListener(delegate { PlayDialogue1(); });
         playDialogue2Button.onClick.AddListener(delegate { PlayDialogue2(); });
         playDialogue3Button.onClick.AddListener(delegate { PlayDialogue3(); });
@@ -44,9 +44,8 @@ public class DialogueManager : MonoBehaviour
     private Coroutine typeRoutine = null;
     void PlayDialogue(string message) {
         this.EnsureCoroutineStopped(ref typeRoutine);
-        utility.textAnimating = false;
-        string totalTextMessage;
-        List<DialogueCommand> commands = utility.ProcessInputString(message, out totalTextMessage);
-        typeRoutine = StartCoroutine(utility.AnimateTextIn(commands, totalTextMessage, typingClip, null));
+        dialogueVertexAnimator.textAnimating = false;
+        List<DialogueCommand> commands = DialogueUtility.ProcessInputString(message, out string totalTextMessage);
+        typeRoutine = StartCoroutine(dialogueVertexAnimator.AnimateTextIn(commands, totalTextMessage, typingClip, null));
     }
 }
