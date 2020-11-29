@@ -2,11 +2,9 @@
 
 Based on code from:
 
-Batbarian <a href="https://store.steampowered.com/app/837460/Batbarian_Testament_of_the_Primordials/">Steam</a>
+Batbarian (<a href="https://store.steampowered.com/app/837460/Batbarian_Testament_of_the_Primordials/">Steam</a>)
 
-and
-
-Kingdom of Night <a href="https://store.steampowered.com/app/1094600/Kingdom_of_Night/">Steam</a>
+Kingdom of Night (<a href="https://store.steampowered.com/app/1094600/Kingdom_of_Night/">Steam</a>)
 
 <a href="">Video Tutorial</a>
 
