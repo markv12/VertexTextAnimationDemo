@@ -1,13 +1,16 @@
 # Vertex Text Animation Demo
 
-Based on code from
+Based on code from:
+
 Batbarian <a href="https://store.steampowered.com/app/837460/Batbarian_Testament_of_the_Primordials/">Steam</a>
+
 and
+
 Kingdom of Night <a href="https://store.steampowered.com/app/1094600/Kingdom_of_Night/">Steam</a>
 
 <a href="">Video Tutorial</a>
 
-Important Classes/Functions
+Important Classes/Functions:
 
 `DialogueManager.cs` Line 45 `PlayDialogue` Starts the text animation
 
