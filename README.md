@@ -6,7 +6,7 @@ Batbarian (<a href="https://store.steampowered.com/app/837460/Batbarian_Testamen
 
 Kingdom of Night (<a href="https://store.steampowered.com/app/1094600/Kingdom_of_Night/">Steam</a>)
 
-<a href="">Video Tutorial</a>
+<a href="https://www.youtube.com/watch?v=So8DpNh3XOE">Video Tutorial</a>
 
 Important Classes/Functions:
 
